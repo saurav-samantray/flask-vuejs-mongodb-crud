@@ -3,7 +3,7 @@ version: '3'
 services:
   server:
     build: ./server
-    container_name: 'fms_dev_server'
+    container_name: 'fvmc_dev_server'
     expose:
       - "8000"
     ports:
@@ -15,7 +15,7 @@ services:
 
   mongodb:
     image: mongo:latest
-    container_name: "fms_db"
+    container_name: "fvmc_db"
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root

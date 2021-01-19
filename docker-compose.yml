@@ -1,21 +1,21 @@
 version: '3'
 
 services:
-  app:
-    container_name: 'fms_app'
+  server:
+    container_name: 'fvmc_app'
     restart: always
-    build: ./app
+    build: ./server
     expose:
       - "8000"
     volumes:
-      - app-data:/static
+      - server-data:/static
     env_file: 
       - .env
     command: /usr/local/bin/gunicorn -w 2 -b :8000 app:app
 
   mongodb:
     image: mongo:latest
-    container_name: "fms_db"
+    container_name: "fvmc_db"
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root
@@ -26,17 +26,17 @@ services:
       - "27017:27017"
 
   nginx:
-    container_name: 'fms_ngnix'
+    container_name: 'fvmc_ngnix'
     restart: always
     build: ./nginx
     ports:
       - "80:80"
     volumes:
       - .:/www/static
-      - app-data:/usr/src/app/static
+      - server-data:/usr/src/app/static
     links:
-      - app:app
+      - server:server
 
 volumes:
-  app-data:
+  server-data:
   mongodb-data:
