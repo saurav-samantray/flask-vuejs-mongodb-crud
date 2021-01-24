@@ -11,6 +11,10 @@ class UsersApi(Resource):
 		users = User.objects().to_json()
 		return Response(users, mimetype="application/json", status=200)
 
+	def delete(self):
+		user = User.objects.delete()
+		return '', 200
+
 	def post(self):
 		try:
 			body = request.get_json()

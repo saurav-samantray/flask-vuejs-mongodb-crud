@@ -1,4 +1,5 @@
 Flask==1.1.2
 Flask-RESTful==0.3.8
+Flask-Cors==3.0.10
 gunicorn==19.9.0
 flask-mongoengine==1.0.0

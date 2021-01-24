@@ -13,6 +13,21 @@ services:
     env_file: 
       - .env
 
+  frontend:
+    stdin_open: true
+    image: node:13.2.0
+    container_name: 'fvmc_dev_client'
+    command: ["/src/client/dev-nuxt.sh"]
+    volumes:
+      - .:/src
+      - node_modules:/src/client/node_modules
+    ports:
+      - 3000:3000
+    depends_on:
+      - server
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+
   mongodb:
     image: mongo:latest
     container_name: "fvmc_db"
@@ -30,4 +45,5 @@ services:
 volumes:
   app:
   mongodb-data:
+  node_modules:
 
