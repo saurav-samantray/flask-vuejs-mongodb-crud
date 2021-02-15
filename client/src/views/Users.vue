@@ -9,7 +9,7 @@
               <b-button v-b-modal.create-user-modal variant="primary">
                 <b-icon icon="plus" aria-hidden="true"></b-icon>Create
               </b-button>
-              <b-button variant="danger align-right ml-3">
+              <b-button variant="danger align-right ml-3" v-b-modal.confirmation-modal>
                 <b-icon icon="trash-fill" aria-hidden="true"></b-icon>Delete All
               </b-button> 
         </div>
@@ -97,7 +97,7 @@ export default {
         .then(response => {
           //this.users = response.data;
           this.retrieveUsers();
-          this.makeToast('success',`Created user ${this.name}`, 'Success')
+          this.makeToast('success',`Created user ${name}`, 'Success')
           console.log(response.data);
         })
         .catch(e => {
@@ -109,17 +109,31 @@ export default {
       })
     },
     deleteUser(){
-      UserDataService.delete(this.selectedUser._id.$oid)
-        .then(response => {
-          //this.users = response.data;
-          this.retrieveUsers();
-          this.makeToast('success',`Deleted user ${this.selectedUser.name}`, 'Success')
-          console.log(response.data);
-        })
-        .catch(e => {
-          this.makeToast('danger',`Couldn't delete user ${this.selectedUser.name}`, 'Failed')
-          console.log(e);
-        });
+      if(this.selectedUser.email != null){
+          UserDataService.delete(this.selectedUser._id.$oid)
+            .then(response => {
+              //this.users = response.data;
+              this.retrieveUsers();
+              this.makeToast('success',`Deleted user ${this.selectedUser.email}`, 'Success')
+              console.log(response.data);
+            })
+            .catch(e => {
+              this.makeToast('danger',`Could not delete user ${this.selectedUser.email}`, 'Failed')
+              console.log(e);
+            });
+        }else{
+          UserDataService.deleteAll()
+            .then(response => {
+              this.retrieveUsers();
+              this.makeToast('success','Deleted All the users', 'Success')
+              console.log(response.data);
+            })
+            .catch(e => {
+              this.makeToast('danger','Could not delete all the users', 'Failed')
+              console.log(e);
+            });
+        }
+      this.selectedUser = {"id":null,"email":null},
       this.$nextTick(() => {
           this.$bvModal.hide('confirmation-modal')
       })
